@@ -10,6 +10,7 @@
     <string name="show_list">SHOW LIST</string>
     <string name="insert">INSERT</string>
     <string name="back">BACK</string>
+    <string name="movie_id">Movie ID</string>
 
     <string-array name="spinnerItems">
         <item>G</item>

@@ -24,6 +24,9 @@
         <activity
             android:name=".ListActivity">
         </activity>
+        <activity
+            android:name=".EditActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,8 @@
 package sg.edu.rp.c346.id22017979.anightatthemovies;
 
-public class Movie {
+import java.io.Serializable;
+
+public class Movie implements Serializable {
     private int id;
     private String title;
     private String genre;
@@ -55,13 +57,11 @@ public class Movie {
         this.rating = rating;
     }
 
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "title='" + title + '\'' +
-                ", genre='" + genre + '\'' +
-                ", year='" + year + '\'' +
-                ", rating='" + rating + '\'' +
-                '}';
+    public void setMovie(String title,String genre,String year,String rating){
+        this.title = title;
+        this.genre = genre;
+        this.year = year;
+        this.rating = rating;
+
     }
 }

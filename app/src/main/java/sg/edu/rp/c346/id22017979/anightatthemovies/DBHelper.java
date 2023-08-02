@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VER = 2;
+    private static final int DATABASE_VER = 4;
     private static final String DATABASE_NAME = "moviesTable.db";
 
     private static final String TABLE_MOVIES = "movies";
@@ -80,8 +80,56 @@ public class DBHelper extends SQLiteOpenHelper {
                 movies.add(obj);
             } while (cursor.moveToNext());
         }
-        cursor.close(); 
+        cursor.close();
         db.close();
         return movies;
+    }
+
+    public int updateMovie(Movie movie){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TITLE, movie.getTitle());
+        values.put(COLUMN_GENRE, movie.getGenre());
+        values.put(COLUMN_RATING, movie.getRating());
+        values.put(COLUMN_YEAR, movie.getYear());
+        String condition = COLUMN_ID + "= ?";
+        String[] args = {String.valueOf(movie.getId())};
+        int result = db.update(TABLE_MOVIES, values, condition, args);
+        db.close();
+        return result;
+    }
+
+    public int deleteMovie (int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String condition = COLUMN_ID + "= ?";
+        String[] args = {String.valueOf(id)};
+        int result = db.delete(TABLE_MOVIES, condition, args);
+        db.close();
+        return result;
+
+    }
+
+    public ArrayList<Movie> getFilteredMovie() {
+        ArrayList<Movie> movie = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {COLUMN_ID, COLUMN_TITLE, COLUMN_GENRE, COLUMN_YEAR, COLUMN_RATING};
+        String condition = COLUMN_RATING + " = 'PG13'";
+        Cursor cursor = db.query(TABLE_MOVIES, columns, condition, null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String songs = cursor.getString(1);
+                String singer = cursor.getString(2);
+                String year = cursor.getString(3);
+                String rating = cursor.getString(4);
+
+                Movie obj = new Movie(id, songs, singer, year, rating);
+                movie.add(obj);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return movie;
     }
 }

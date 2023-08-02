@@ -63,26 +63,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        String title = etTitle.getText().toString();
-        String genre = etGenre.getText().toString();
-        String year = etYear.getText().toString();
+
+
 
         btnInsert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper db = new DBHelper(MainActivity.this);
-                db.insertMovie(title,genre,year,rating);
-                etTitle.setText("");
-                etGenre.setText("");
-                etYear.setText("");
-                spn.setSelection(0);
-                Toast.makeText(MainActivity.this, "Movie Inserted", Toast.LENGTH_SHORT).show();
 
+                String title = etTitle.getText().toString();
+                String genre = etGenre.getText().toString();
+                String year = etYear.getText().toString();
+                if(title.equalsIgnoreCase("")||genre.equalsIgnoreCase("")||year.equalsIgnoreCase("")){
+                    Toast.makeText(MainActivity.this, "Blank empty", Toast.LENGTH_SHORT).show();
+                }else {
+
+                    DBHelper db = new DBHelper(MainActivity.this);
+                    db.insertMovie(title, genre, year, rating);
+                    etTitle.setText("");
+                    etGenre.setText("");
+                    etYear.setText("");
+                    spn.setSelection(0);
+                    Toast.makeText(MainActivity.this, "Movie Inserted", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         btnList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
                 startActivity(intent);
             }

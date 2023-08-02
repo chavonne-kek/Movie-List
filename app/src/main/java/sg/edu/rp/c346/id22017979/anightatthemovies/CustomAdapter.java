@@ -52,6 +52,9 @@ public class CustomAdapter extends ArrayAdapter {
             iv.setImageResource(R.drawable.rating_r21);
         }
 
+
         return rowView;
+
+
     }
 }
