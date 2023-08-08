@@ -1,6 +1,8 @@
 package sg.edu.rp.c346.id22017979.anightatthemovies;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,11 +12,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class EditActivity extends AppCompatActivity {
     EditText etYear, etGenre, etTitle, etId;
-    Button btnDel, btnUpdate,btnFilter;
+    Button btnDel, btnUpdate,btnBack;
     Spinner spn;
     Movie data;
     String newRating;
@@ -30,6 +33,7 @@ public class EditActivity extends AppCompatActivity {
         btnUpdate = findViewById(R.id.btnUpdate);
         spn = findViewById(R.id.spn);
         etId = findViewById(R.id.etId);
+        btnBack = findViewById(R.id.btnBack);
 
         Intent intent = getIntent();
         data = (Movie) intent.getSerializableExtra("data");
@@ -114,16 +118,54 @@ public class EditActivity extends AppCompatActivity {
         btnDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper db = new DBHelper(EditActivity.this);
-                db.deleteMovie(data.getId());
-                db.close();
+                String movie = data.getTitle();
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
 
-                Toast.makeText(EditActivity.this, "Movie deleted", Toast.LENGTH_SHORT).show();
+                builder.setTitle("Danger");
+                builder.setMessage("Are you sure you want to delete the movie " + movie + "?");
+                builder.setCancelable(false);
 
-                finish();
-                Intent i = new Intent(EditActivity.this,
-                        ListActivity.class);
-                startActivity(i);
+                builder.setNegativeButton("Cancel", null);
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DBHelper db = new DBHelper(EditActivity.this);
+                        db.deleteMovie(data.getId());
+                        db.close();
+
+                        Toast.makeText(EditActivity.this, "Movie deleted", Toast.LENGTH_SHORT).show();
+
+                        finish();
+                        Intent i = new Intent(EditActivity.this,
+                                ListActivity.class);
+                        startActivity(i);
+
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
+
+                builder.setTitle("Danger");
+                builder.setMessage("Are you sure you want to discard the changes?");
+                builder.setCancelable(false);
+
+                builder.setNegativeButton("Cancel", null);
+                builder.setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        Intent i = new Intent(EditActivity.this, ListActivity.class);
+                        startActivity(i);
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
